@@ -1,0 +1,56 @@
+#!/usr/bin/env python
+import subprocess
+import os
+import sys
+import argparse
+
+parser = argparse.ArgumentParser(description='Instrument some files and assemble a runner.m script with the other files')
+parser.add_argument('--to-use', metavar='N', type=str, nargs='*',
+                            help='regular file to use without instrumentation')
+parser.add_argument('--to-instrument', metavar='N', type=str, nargs='*',
+                            help='file to instrument then use')
+parser.add_argument('--aspect', metavar='N', type=str, nargs=1,
+                            help='aspect file to use for instrumentation')
+
+args = parser.parse_args()
+
+run_script_dir = os.path.dirname(os.path.realpath(os.path.realpath(__file__)))
+
+core_files = args.to_instrument
+regular_files = args.to_use
+aspect_file = args.aspect
+
+# To sidestep the incorrect parsing of file paths of AspectMatlab on the commandline
+# we first copy them, then use the copied version
+cp_core_files = ["cp"]
+cp_core_files.extend(core_files)
+cp_core_files.extend(aspect_file)
+cp_core_files.append("./")
+subprocess.Popen(cp_core_files, stdout=sys.stdout, stderr=sys.stderr).communicate()
+core_files = map(lambda s: os.path.basename(s), core_files)
+aspect_file = map(lambda s: os.path.basename(s), aspect_file)
+
+# Instrument the core files
+instrument_core_files = [
+    "java", 
+    "-jar", os.path.join(run_script_dir, "AspectMatlab", "AspectMatlab", "amc.jar"),
+    "-out", "instrumented",
+]
+instrument_core_files.extend(core_files)
+instrument_core_files.extend(aspect_file)
+subprocess.Popen(instrument_core_files, stdout=sys.stdout, stderr=sys.stderr).communicate()
+
+# Copy all the files into the build directory for direct access
+cp_all_files_in_build_directory = ["cp", "-r", "instrumented/"]
+cp_all_files_in_build_directory.extend(regular_files)
+cp_all_files_in_build_directory.append("./")
+subprocess.Popen(cp_all_files_in_build_directory, stdout=sys.stdout, stderr=sys.stderr).communicate()
+
+
+
+
+
+
+
+
+

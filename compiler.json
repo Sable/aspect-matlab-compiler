@@ -1,0 +1,32 @@
+{
+    "type": "compiler",
+    "short-name":"aspect-matlab",
+    "name": "Aspect Matlab compiler",
+    "supported-languages":[
+        "matlab"
+    ],
+    "target-languages":[
+        "matlab"
+    ],
+    "runner-name":"runner.m",
+    "commands": [
+        {   
+            "executable-path": { "file": "./instrument-in-build-directory" },
+            "options": [
+                "--to-instrument",
+                { "config": "/implementation/core-source-files", "optional": true },
+                "--to-use",
+                { "config": "/implementation/runner-source-file"},
+                { "config": "/implementation/libraries", "optional": true },
+                "--aspect",
+                { "file": "./examples/grow.m" }
+            ]
+        }
+    ],
+    "dependencies": [
+        {
+            "source": "https://github.com/Sable/AspectMatlab.git",
+            "destination": { "file": "./AspectMatlab" }
+        }
+    ]
+}
