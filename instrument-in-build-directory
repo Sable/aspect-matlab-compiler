@@ -41,16 +41,8 @@ instrument_core_files.extend(aspect_file)
 subprocess.Popen(instrument_core_files, stdout=sys.stdout, stderr=sys.stderr).communicate()
 
 # Copy all the files into the build directory for direct access
-cp_all_files_in_build_directory = ["cp", "-r", "instrumented/"]
+os.chdir("instrumented")
+cp_all_files_in_build_directory = ["cp", "-r", "./"]
 cp_all_files_in_build_directory.extend(regular_files)
-cp_all_files_in_build_directory.append("./")
+cp_all_files_in_build_directory.append("../")
 subprocess.Popen(cp_all_files_in_build_directory, stdout=sys.stdout, stderr=sys.stderr).communicate()
-
-
-
-
-
-
-
-
-
