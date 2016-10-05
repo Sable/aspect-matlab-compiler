@@ -43,6 +43,7 @@ subprocess.Popen(instrument_core_files, stdout=sys.stdout, stderr=sys.stderr).co
 # Copy all the files into the build directory for direct access
 os.chdir("instrumented")
 cp_all_files_in_build_directory = ["cp", "-r", "./"]
-cp_all_files_in_build_directory.extend(regular_files)
+if regular_files != None:
+    cp_all_files_in_build_directory.extend(regular_files)
 cp_all_files_in_build_directory.append("../")
 subprocess.Popen(cp_all_files_in_build_directory, stdout=sys.stdout, stderr=sys.stderr).communicate()

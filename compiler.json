@@ -15,7 +15,6 @@
             "options": [
                 "--to-instrument",
                 { "config": "/implementation/core-source-files", "optional": true },
-                "--to-use",
                 { "config": "/implementation/runner-source-file"},
                 { "config": "/implementation/libraries", "optional": true },
                 "--aspect",
